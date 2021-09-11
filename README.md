@@ -5,6 +5,11 @@
 - Bi::crc32()
 - Bi::crc64()
 
+# Changelog
+
+## 0.2.0
+- implements crc32() internally.
+
 # License
 
 Copyright 2021 kbys <work4kbys@gmail.com>
