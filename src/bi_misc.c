@@ -110,19 +110,22 @@ static uint32_t CRC32_TABLE[256] = {
   0x616495A3, 0x1663A535, 0x8F6AF48F, 0xF86DC419, 0x660951BA, 0x110E612C, 0x88073096, 0xFF000000
 };
 
-static uint64_t crc64(uint64_t crc, const uint8_t *buf, size_t size)
+uint64_t bi_crc64(uint64_t crc, const void* buf, size_t size)
 {
+  const uint8_t *b = buf;
   crc = ~crc;
   while (size != 0) {
-    crc = CRC64_TABLE[*buf++ ^ (crc & 0xFF)] ^ (crc >> 8);
+    crc = CRC64_TABLE[*b++ ^ (crc&0xFF)] ^ (crc >> 8);
     --size;
   }
   return ~crc;
 }
 
-static uint32_t crc32(uint32_t crc, const uint8_t *buf, size_t size) {
+uint32_t bi_crc32(uint32_t crc, const void* buf, size_t size)
+{
+  const uint8_t *b = buf;
   while(size!=0){
-    crc = CRC32_TABLE[*buf++ ^ crc&0xff] ^ crc >> 8;
+    crc = CRC32_TABLE[*b++ ^ (crc&0xff)] ^ crc >> 8;
     --size;
   }
   return crc;
@@ -133,7 +136,7 @@ static mrb_value mrb_bi_crc32(mrb_state *mrb, mrb_value ary)
   mrb_int crc;
   mrb_value str;
   mrb_get_args(mrb, "iS", &crc, &str);
-  return mrb_fixnum_value( crc32(crc,RSTRING_PTR(str),RSTRING_LEN(str)) );
+  return mrb_fixnum_value( bi_crc32(crc,RSTRING_PTR(str),RSTRING_LEN(str)) );
 }
 
 static mrb_value mrb_bi_crc64(mrb_state *mrb, mrb_value ary)
@@ -141,7 +144,7 @@ static mrb_value mrb_bi_crc64(mrb_state *mrb, mrb_value ary)
   mrb_int crc;
   mrb_value str;
   mrb_get_args(mrb, "iS", &crc, &str);
-  return mrb_fixnum_value( crc64(crc,(const uint8_t*)RSTRING_PTR(str),RSTRING_LEN(str)) );
+  return mrb_fixnum_value( bi_crc64(crc,(const uint8_t*)RSTRING_PTR(str),RSTRING_LEN(str)) );
 }
 
 //

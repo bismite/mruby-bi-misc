@@ -7,6 +7,9 @@
 
 # Changelog
 
+## 0.3.0
+- extern bi_crc64() and bi_crc32().
+
 ## 0.2.0
 - implements crc32() internally.
 
