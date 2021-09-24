@@ -5,6 +5,14 @@
 #include <stdlib.h>
 
 //
+extern void mrb_mruby_bi_archive_gem_init(mrb_state* mrb);
+extern void mrb_mruby_bi_geometry_gem_init(mrb_state* mrb);
+extern void mrb_mruby_bi_image_gem_init(mrb_state* mrb);
+extern void mrb_mruby_bi_sound_gem_init(mrb_state* mrb);
+extern void mrb_mruby_cellular_automaton_gem_init(mrb_state *mrb);
+extern void mrb_mruby_bi_dlopen_gem_init(mrb_state* mrb);
+
+//
 // ---- crc ----
 //
 
@@ -211,6 +219,14 @@ void mrb_mruby_bi_misc_gem_init(mrb_state *mrb)
   bi = mrb_define_class(mrb, "Bi", mrb->object_class);
   mrb_define_class_method(mrb, bi, "crc32", mrb_bi_crc32, MRB_ARGS_REQ(2)); // crc,str
   mrb_define_class_method(mrb, bi, "crc64", mrb_bi_crc64, MRB_ARGS_REQ(2)); // crc,str
+
+  //
+  mrb_mruby_bi_archive_gem_init(mrb);
+  mrb_mruby_bi_geometry_gem_init(mrb);
+  mrb_mruby_bi_image_gem_init(mrb);
+  mrb_mruby_bi_sound_gem_init(mrb);
+  mrb_mruby_cellular_automaton_gem_init(mrb);
+  mrb_mruby_bi_dlopen_gem_init(mrb);
 }
 
 void mrb_mruby_bi_misc_gem_final(mrb_state *mrb)
