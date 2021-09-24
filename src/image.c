@@ -5,11 +5,7 @@
 #include <bi/bi_sdl.h>
 #include <bi_core.h>
 
-void mrb_image_free(mrb_state *mrb,void* p){
-  SDL_Surface *img = p;
-  SDL_FreeSurface(img);
-}
-
+void mrb_image_free(mrb_state *mrb,void* p){ SDL_FreeSurface(p); }
 static struct mrb_data_type const mrb_image_data_type = { "Image", mrb_image_free };
 
 static mrb_value mrb_bi_image_initialize(mrb_state *mrb, mrb_value self)
@@ -95,8 +91,4 @@ void mrb_mruby_bi_image_gem_init(mrb_state* mrb)
   mrb_define_method(mrb, image, "to_texture", mrb_bi_image_to_texture, MRB_ARGS_REQ(1) ); // antialiase
   mrb_define_method(mrb, image, "blit!", mrb_bi_image_blit, MRB_ARGS_REQ(3) ); // Image,x,y
   mrb_define_method(mrb, image, "save", mrb_bi_image_save, MRB_ARGS_REQ(1) ); // path
-}
-
-void mrb_mruby_bi_image_gem_final(mrb_state* mrb)
-{
 }

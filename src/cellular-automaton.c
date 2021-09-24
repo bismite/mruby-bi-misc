@@ -73,12 +73,6 @@ static mrb_value mrb_cellular_automaton_step(mrb_state *mrb, mrb_value ary)
 
 void mrb_mruby_cellular_automaton_gem_init(mrb_state *mrb)
 {
-  struct RClass *ca;
-  ca = mrb_define_class(mrb, "CellularAutomaton", mrb->object_class);
-  MRB_SET_INSTANCE_TT(ca, MRB_TT_DATA);
+  struct RClass *ca = mrb_define_class(mrb, "CellularAutomaton", mrb->object_class);
   mrb_define_class_method(mrb, ca, "step", mrb_cellular_automaton_step, MRB_ARGS_REQ(6));
-}
-
-void mrb_mruby_cellular_automaton_gem_final(mrb_state *mrb)
-{
 }

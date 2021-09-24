@@ -227,35 +227,24 @@ static mrb_value mrb_bi_music_play(mrb_state *mrb, mrb_value self)
 
 void mrb_mruby_bi_sound_gem_init(mrb_state* mrb)
 {
-  struct RClass *bi;
-  bi = mrb_define_class(mrb, "Bi", mrb->object_class);
-  MRB_SET_INSTANCE_TT(bi, MRB_TT_DATA);
+  struct RClass *bi = mrb_class_get(mrb, "Bi");
 
-  struct RClass *sound;
-  sound = mrb_define_class_under(mrb, bi, "Sound", mrb->object_class);
+  // sound
+  struct RClass *sound = mrb_define_class_under(mrb, bi, "Sound", mrb->object_class);
   MRB_SET_INSTANCE_TT(sound, MRB_TT_DATA);
-
   mrb_define_class_method(mrb, sound, "init", mrb_bi_sound_init, MRB_ARGS_REQ(3)); // freq, channel, buffer
   mrb_define_class_method(mrb, sound, "allocate_channels", mrb_bi_sound_allocate_channels, MRB_ARGS_REQ(1));
   mrb_define_class_method(mrb, sound, "read", mrb_bi_sound_read, MRB_ARGS_REQ(1)); // filename
   mrb_define_class_method(mrb, sound, "pan", mrb_bi_sound_pan, MRB_ARGS_REQ(3)); // channel,left,right
-
   mrb_define_method(mrb, sound, "initialize", mrb_bi_sound_initialize, MRB_ARGS_REQ(1)); // sound-data
   mrb_define_method(mrb, sound, "play", mrb_bi_sound_play, MRB_ARGS_REQ(2)); // channel, loop
 
-  //
-
-  struct RClass *music;
-  music = mrb_define_class_under(mrb, bi, "Music", mrb->object_class);
+  // music
+  struct RClass *music = mrb_define_class_under(mrb, bi, "Music", mrb->object_class);
   MRB_SET_INSTANCE_TT(music, MRB_TT_DATA);
-
   mrb_define_class_method(mrb, music, "read", mrb_bi_music_read, MRB_ARGS_REQ(1)); // filename
   mrb_define_class_method(mrb, music, "volume=", mrb_bi_music_set_volume, MRB_ARGS_REQ(1)); // volume(0-127)
   mrb_define_class_method(mrb, music, "volume", mrb_bi_music_get_volume, MRB_ARGS_NONE());
   mrb_define_method(mrb, music, "initialize", mrb_bi_music_initialize, MRB_ARGS_REQ(1)); // music-data
   mrb_define_method(mrb, music, "play", mrb_bi_music_play, MRB_ARGS_REQ(1)); // loop
-}
-
-void mrb_mruby_bi_sound_gem_final(mrb_state* mrb)
-{
 }

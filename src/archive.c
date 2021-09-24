@@ -44,9 +44,8 @@ typedef struct {
 
 static void bi_archive_free(mrb_state *mrb, void *p)
 {
-  mrb_bi_archive_struct* a = (mrb_bi_archive_struct*)p;
-  free(a->data);
-  mrb_free(mrb,a);
+  free(((mrb_bi_archive_struct*)p)->data);
+  mrb_free(mrb,p);
 }
 
 static struct mrb_data_type const mrb_archive_data_type = { "Archive", bi_archive_free };
@@ -273,8 +272,4 @@ void mrb_mruby_bi_archive_gem_init(mrb_state* mrb)
 
   mrb_define_method(mrb, archive, "_texture", mrb_archive_texture, MRB_ARGS_REQ(4)); // start, size, encrypted, antialias
   mrb_define_method(mrb, archive, "_read", mrb_archive_read, MRB_ARGS_REQ(2)); // start, size
-}
-
-void mrb_mruby_bi_archive_gem_final(mrb_state* mrb)
-{
 }

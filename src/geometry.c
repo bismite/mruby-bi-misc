@@ -4,6 +4,8 @@
 #include <mruby/numeric.h>
 #include <stdbool.h>
 
+#define f(a,x) mrb_to_flo(mrb,RARRAY_PTR(a)[x])
+
 //
 // inner methods
 //
@@ -21,12 +23,14 @@ static bool _include_point(mrb_float rx, mrb_float ry, mrb_float rw, mrb_float r
   return( rx <= px && px <= rx+rw && ry <= py && py <= ry+rh );
 }
 
-static mrb_float _cross_product(mrb_float x1, mrb_float y1, mrb_float x2, mrb_float y2, mrb_float x3, mrb_float y3, mrb_float x4, mrb_float y4)
+static mrb_float _cross_product(mrb_float x1, mrb_float y1, mrb_float x2, mrb_float y2,
+                                mrb_float x3, mrb_float y3, mrb_float x4, mrb_float y4)
 {
   return( (x2-x1) * (y4-y3) - (y2-y1) * (x4-x3) );
 }
 
-static bool _intersection(mrb_float x1, mrb_float y1, mrb_float x2, mrb_float y2, mrb_float x3, mrb_float y3, mrb_float x4, mrb_float y4, mrb_float *ix, mrb_float *iy)
+static bool _intersection(mrb_float x1, mrb_float y1, mrb_float x2, mrb_float y2,
+                          mrb_float x3, mrb_float y3, mrb_float x4, mrb_float y4, mrb_float *ix, mrb_float *iy)
 {
   double dx1 = x2 - x1;
   double dy1 = y2 - y1;
@@ -52,7 +56,8 @@ static bool _on(mrb_float x1, mrb_float y1, mrb_float x2, mrb_float y2, mrb_floa
   return( _include_point(x1,y1,x2-x1,y2-y1,px,py) && _cross_product(x1,y1,x2,y2,x1,y1,px,py) == 0 );
 }
 
-static int _compare_length(mrb_float x1, mrb_float y1, mrb_float x2, mrb_float y2, mrb_float x3, mrb_float y3, mrb_float x4, mrb_float y4)
+static int _compare_length(mrb_float x1, mrb_float y1, mrb_float x2, mrb_float y2,
+                           mrb_float x3, mrb_float y3, mrb_float x4, mrb_float y4)
 {
     mrb_float a = ( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
     mrb_float b = ( (x4-x3)*(x4-x3) + (y4-y3)*(y4-y3) );
@@ -121,8 +126,8 @@ static mrb_value mrb_bi_line_nearest_intersection(mrb_state *mrb, mrb_value self
     v = RARRAY_PTR(subjects)[i];
     switch (RARRAY_LEN(v)) {
     case 2:
-      px = mrb_to_flo(mrb,RARRAY_PTR(v)[0]);
-      py = mrb_to_flo(mrb,RARRAY_PTR(v)[1]);
+      px = f(v,0);
+      py = f(v,1);
       new_intersection = _on(sx,sy,dx,dy, px, py );
       if(new_intersection){
         ix = px;
@@ -131,7 +136,7 @@ static mrb_value mrb_bi_line_nearest_intersection(mrb_state *mrb, mrb_value self
       break;
     case 4:
       new_intersection = _intersection(sx,sy,dx,dy,
-                                       mrb_to_flo(mrb,RARRAY_PTR(v)[0]), mrb_to_flo(mrb,RARRAY_PTR(v)[1]), mrb_to_flo(mrb,RARRAY_PTR(v)[2]), mrb_to_flo(mrb,RARRAY_PTR(v)[3]),
+                                       f(v,0), f(v,1), f(v,2), f(v,3),
                                        &ix, &iy );
       break;
     }
@@ -193,27 +198,14 @@ static mrb_value mrb_bi_rect_include_point(mrb_state *mrb, mrb_value self)
 
 void mrb_mruby_bi_geometry_gem_init(mrb_state* mrb)
 {
-  struct RClass *bi;
-  struct RClass *line;
-  struct RClass *rect;
-
-  bi = mrb_define_class(mrb, "Bi", mrb->object_class);
-  // MRB_SET_INSTANCE_TT(bi, MRB_TT_DATA);
-
-  line = mrb_define_module_under(mrb, bi, "Line");
-  rect = mrb_define_module_under(mrb, bi, "Rectangle");
-  // MRB_SET_INSTANCE_TT(sound, MRB_TT_DATA);
-
+  struct RClass *bi = mrb_class_get(mrb,"Bi");
+  struct RClass *line = mrb_define_module_under(mrb, bi, "Line");
+  struct RClass *rect = mrb_define_module_under(mrb, bi, "Rectangle");
   mrb_define_class_method(mrb, line, "intersection", mrb_bi_line_intersection, MRB_ARGS_REQ(8));
   mrb_define_class_method(mrb, line, "cross_product", mrb_bi_line_cross_product, MRB_ARGS_REQ(8));
   mrb_define_class_method(mrb, line, "on?", mrb_bi_line_on, MRB_ARGS_REQ(8));
   mrb_define_class_method(mrb, line, "compare_length", mrb_bi_line_compare_length, MRB_ARGS_REQ(8));
   mrb_define_class_method(mrb, line, "nearest_intersection", mrb_bi_line_nearest_intersection, MRB_ARGS_REQ(5));
-
   mrb_define_class_method(mrb, rect, "collide?", mrb_bi_rect_collide, MRB_ARGS_REQ(8));
   mrb_define_class_method(mrb, rect, "include_point?", mrb_bi_rect_include_point, MRB_ARGS_REQ(6));
-}
-
-void mrb_mruby_bi_geometry_gem_final(mrb_state* mrb)
-{
 }

@@ -9,6 +9,7 @@
 typedef void (*mrb_dl_func)(mrb_state*);
 
 #ifdef __EMSCRIPTEN__
+
 #include <emscripten.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,55 +48,48 @@ static void onerror(unsigned int req_handle, void *_context, int http_status_cod
 
 static mrb_value mrb_dlopen(mrb_state *mrb, mrb_value self)
 {
-    mrb_value filename,symbol,callback;
-    mrb_get_args(mrb, "SS&", &filename, &symbol, &callback );
+  mrb_value filename,symbol,callback;
+  mrb_get_args(mrb, "SS&", &filename, &symbol, &callback );
 
-    dl_wget_context* context = malloc(sizeof(dl_wget_context));
-    context->mrb = mrb;
-    context->callback = callback;
-    context->filename = malloc( strlen(RSTRING_CSTR(mrb,filename)) +1 );
-    strcpy(context->filename, RSTRING_CSTR(mrb,filename) );
-    context->symbol = malloc( strlen(RSTRING_CSTR(mrb,filename)) +1 );
-    strcpy(context->symbol, RSTRING_CSTR(mrb,symbol) );
+  dl_wget_context* context = malloc(sizeof(dl_wget_context));
+  context->mrb = mrb;
+  context->callback = callback;
+  context->filename = malloc( strlen(RSTRING_CSTR(mrb,filename)) +1 );
+  strcpy(context->filename, RSTRING_CSTR(mrb,filename) );
+  context->symbol = malloc( strlen(RSTRING_CSTR(mrb,filename)) +1 );
+  strcpy(context->symbol, RSTRING_CSTR(mrb,symbol) );
 
-    emscripten_async_wget2( context->filename, context->filename, "GET", "", context, onload, onerror, NULL);
+  emscripten_async_wget2( context->filename, context->filename, "GET", "", context, onload, onerror, NULL);
 
-    return self;
+  return self;
 }
 
-#else
+#else // ! __EMSCRIPTEN__
 
 static mrb_value mrb_dlopen(mrb_state *mrb, mrb_value self)
 {
-    mrb_value filename,symbol,callback;
-    mrb_get_args(mrb, "SS&", &filename, &symbol, &callback );
+  mrb_value filename,symbol,callback;
+  mrb_get_args(mrb, "SS&", &filename, &symbol, &callback );
 
-    void *handle = SDL_LoadObject(RSTRING_PTR(filename));
-    if(handle){
-      mrb_dl_func func = (mrb_dl_func)SDL_LoadFunction(handle, RSTRING_PTR(symbol) );
-      if(func){
-        func(mrb);
-        mrb_yield(mrb,callback,mrb_true_value());
-      }else{
-        mrb_yield(mrb,callback,mrb_false_value());
-      }
+  void *handle = SDL_LoadObject(RSTRING_PTR(filename));
+  if(handle){
+    mrb_dl_func func = (mrb_dl_func)SDL_LoadFunction(handle, RSTRING_PTR(symbol) );
+    if(func){
+      func(mrb);
+      mrb_yield(mrb,callback,mrb_true_value());
     }else{
       mrb_yield(mrb,callback,mrb_false_value());
     }
+  }else{
+    mrb_yield(mrb,callback,mrb_false_value());
+  }
 
-    return self;
+  return self;
 }
 
 #endif
 
 void mrb_mruby_bi_dlopen_gem_init(mrb_state* mrb)
 {
-  struct RClass *kernel;
-  kernel = mrb->kernel_module;
-
-  mrb_define_method(mrb, kernel, "dlopen", mrb_dlopen, MRB_ARGS_REQ(3)); // filename, symbol, callback
-}
-
-void mrb_mruby_bi_dlopen_gem_final(mrb_state* mrb)
-{
+  mrb_define_method(mrb, mrb->kernel_module, "dlopen", mrb_dlopen, MRB_ARGS_REQ(3)); // filename, symbol, callback
 }

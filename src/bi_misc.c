@@ -215,8 +215,7 @@ void mrb_mruby_bi_misc_gem_init(mrb_state *mrb)
   struct RClass * a = mrb->array_class;
   mrb_define_method(mrb, a, "stable_sort", mrb_sort_ab_sort_ab, MRB_ARGS_REQ(1));
 
-  struct RClass *bi;
-  bi = mrb_define_class(mrb, "Bi", mrb->object_class);
+  struct RClass *bi = mrb_class_get(mrb, "Bi");
   mrb_define_class_method(mrb, bi, "crc32", mrb_bi_crc32, MRB_ARGS_REQ(2)); // crc,str
   mrb_define_class_method(mrb, bi, "crc64", mrb_bi_crc64, MRB_ARGS_REQ(2)); // crc,str
 
