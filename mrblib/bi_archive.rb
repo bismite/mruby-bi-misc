@@ -52,7 +52,7 @@ class Bi::Archive
     e = @index[name]
     if e
       self._read e.start,e.size
-    elsif @fallback & File.file?(name)
+    elsif File.file?(name)
       File.open(name).read
     end
   end

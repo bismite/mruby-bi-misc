@@ -28,7 +28,7 @@ static mrb_value mrb_bi_sound_init(mrb_state *mrb, mrb_value self)
   mrb_int freq, channel, buffer;
   mrb_get_args(mrb, "iii", &freq, &channel, &buffer );
 
-  Mix_Init(MIX_INIT_MP3|MIX_INIT_OGG);
+  Mix_Init(MIX_INIT_MP3);
   if( Mix_OpenAudio( freq, MIX_DEFAULT_FORMAT, channel, buffer ) == -1 ) {
     return mrb_false_value();
   }
