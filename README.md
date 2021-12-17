@@ -1,15 +1,20 @@
 # mruby-bi-misc
 
+- Bi::Archive
+- Bi::Sound
+- Bi::Line and Bi::Rectangle
+- Bi::crc32() and Bi::crc64()
+- CellularAutomaton
+- dlopen
+- stable_sort
 - rand() with Range object
 - coinflip()
-- Bi::crc32()
-- Bi::crc64()
 
 # Changelog
-
+## 0.4.0 - 2021/12/28
+- remove Bi::Image
 ## 0.3.0
 - extern bi_crc64() and bi_crc32().
-
 ## 0.2.0
 - implements crc32() internally.
 
