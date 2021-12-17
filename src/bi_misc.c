@@ -7,7 +7,6 @@
 //
 extern void mrb_mruby_bi_archive_gem_init(mrb_state* mrb);
 extern void mrb_mruby_bi_geometry_gem_init(mrb_state* mrb);
-extern void mrb_mruby_bi_image_gem_init(mrb_state* mrb);
 extern void mrb_mruby_bi_sound_gem_init(mrb_state* mrb);
 extern void mrb_mruby_cellular_automaton_gem_init(mrb_state *mrb);
 extern void mrb_mruby_bi_dlopen_gem_init(mrb_state* mrb);
@@ -222,7 +221,6 @@ void mrb_mruby_bi_misc_gem_init(mrb_state *mrb)
   //
   mrb_mruby_bi_archive_gem_init(mrb);
   mrb_mruby_bi_geometry_gem_init(mrb);
-  mrb_mruby_bi_image_gem_init(mrb);
   mrb_mruby_bi_sound_gem_init(mrb);
   mrb_mruby_cellular_automaton_gem_init(mrb);
   mrb_mruby_bi_dlopen_gem_init(mrb);
