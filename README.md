@@ -11,7 +11,9 @@
 - coinflip()
 
 # Changelog
-## 0.4.0 - 2021/12/28
+## 0.5.0 - 2021/12/22
+- for libbismite 1.2
+## 0.4.0 - 2021/12/18
 - remove Bi::Image
 ## 0.3.0
 - extern bi_crc64() and bi_crc32().

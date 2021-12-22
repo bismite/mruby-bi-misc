@@ -8,6 +8,7 @@
 #include <mruby/msgpack.h>
 
 #include <bi/texture.h>
+#include <bi/bi_sdl.h>
 #include <bi_core.h>
 #include <bi_misc.h>
 

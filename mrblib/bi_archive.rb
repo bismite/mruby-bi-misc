@@ -58,14 +58,14 @@ class Bi::Archive
   end
 
   # load texture image
-  def texture(name,antialias=false)
+  def texture(name,straight_alpha=false)
     e = @index[name]
     if e
-      t = self._texture e.start,e.size,e.encrypted,antialias
+      t = self._texture e.start,e.size,e.encrypted,straight_alpha
       e.encrypted = false if emscripten?
       t
     elsif File.file?(name)
-      Bi::Texture.new name, antialias
+      Bi::Texture.new name, straight_alpha
     end
   end
 
