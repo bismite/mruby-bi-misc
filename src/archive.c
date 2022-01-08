@@ -22,14 +22,14 @@
 //
 static void decrypt64(void* buf,uint32_t size,uint64_t secret)
 {
-  char* b = (char*)buf;
-  uint64_t* b64 = (uint64_t*)buf;
-
+  uint64_t* b64 = buf;
   for(int i=0;i<size/8;i++){ b64[i] ^= secret; }
-  int r = size - size/8*8;
-  while(r){
-    b[size-r] ^= secret>>(8*(7-r)) & 0xff;
-    r--;
+  if(size%8>0){
+    uint8_t *b = buf;
+    uint64_t tmp = 0;
+    memcpy(&tmp, &b[size-size%8], size%8);
+    tmp ^= secret;
+    memcpy(&b[size-size%8], &tmp, size%8);
   }
 }
 

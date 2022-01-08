@@ -11,6 +11,8 @@
 - coinflip()
 
 # Changelog
+## 0.5.1 - 2022/1/9
+- fix archive decrypt
 ## 0.5.0 - 2021/12/22
 - for libbismite 1.2
 ## 0.4.0 - 2021/12/18
