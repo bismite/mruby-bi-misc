@@ -11,6 +11,8 @@
 - coinflip()
 
 # Changelog
+## 0.6.0 - 2022/6/8
+- add MRB_FIXNUM_MIN and MRB_FIXNUM_MAX
 ## 0.5.1 - 2022/1/9
 - fix archive decrypt
 ## 0.5.0 - 2021/12/22
@@ -24,6 +26,6 @@
 
 # License
 
-Copyright 2021 kbys <work4kbys@gmail.com>
+Copyright 2021-2022 kbys <work4kbys@gmail.com>
 
 Apache License Version 2.0

@@ -218,6 +218,9 @@ void mrb_mruby_bi_misc_gem_init(mrb_state *mrb)
   mrb_define_class_method(mrb, bi, "crc32", mrb_bi_crc32, MRB_ARGS_REQ(2)); // crc,str
   mrb_define_class_method(mrb, bi, "crc64", mrb_bi_crc64, MRB_ARGS_REQ(2)); // crc,str
 
+  mrb_define_const(mrb, mrb->kernel_module, "MRB_FIXNUM_MIN", mrb_fixnum_value(MRB_FIXNUM_MIN));
+  mrb_define_const(mrb, mrb->kernel_module, "MRB_FIXNUM_MAX", mrb_fixnum_value(MRB_FIXNUM_MAX));
+
   //
   mrb_mruby_bi_archive_gem_init(mrb);
   mrb_mruby_bi_geometry_gem_init(mrb);
