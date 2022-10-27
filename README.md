@@ -11,6 +11,8 @@
 - coinflip()
 
 # Changelog
+## 0.6.1 - 2022/10/27
+- fix: rand() default argument is 0
 ## 0.6.0 - 2022/6/8
 - add MRB_FIXNUM_MIN and MRB_FIXNUM_MAX
 ## 0.5.1 - 2022/1/9
