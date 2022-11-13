@@ -5,8 +5,6 @@
 #include <mruby/string.h>
 #include <mruby/hash.h>
 
-#include <mruby/msgpack.h>
-
 #include <bi/texture.h>
 #include <bi/bi_sdl.h>
 #include <bi_core.h>
@@ -89,9 +87,10 @@ static void read_from_rwops(mrb_state *mrb, mrb_value self, SDL_RWops *io)
     mrb_raise(mrb, E_RUNTIME_ERROR, "archive load failed: index can not read.");
   }
   decrypt64(buf,index_size,a->secret);
-
-  mrb_value msgpacked_str = mrb_str_new_static(mrb,buf,index_size);
-  mrb_funcall(mrb,self,"_set_index",1,mrb_msgpack_unpack(mrb,msgpacked_str));
+  mrb_value index_str = mrb_str_new_static(mrb,buf,index_size);
+  mrb_value json_mod = mrb_obj_value( mrb_module_get(mrb,"JSON") );
+  mrb_value index_obj = mrb_funcall(mrb,json_mod,"load",1,index_str);
+  mrb_funcall(mrb,self,"_set_index",1,index_obj);
   free(buf);
 }
 

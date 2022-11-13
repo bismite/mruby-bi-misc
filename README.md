@@ -11,6 +11,8 @@
 - coinflip()
 
 # Changelog
+## 1.0.0 - 2022/11/14
+- Use json instead of msgpack for assets archive.
 ## 0.6.1 - 2022/10/27
 - fix: rand() default argument is 0
 ## 0.6.0 - 2022/6/8
