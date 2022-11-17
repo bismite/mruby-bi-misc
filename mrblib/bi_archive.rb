@@ -2,6 +2,7 @@
 class Bi::Archive
   attr_accessor :path, :index
   attr_accessor :callback,:on_progress
+  attr_reader :error
 
   class Entry
     attr_accessor :path, :encrypted, :start, :size
@@ -43,8 +44,19 @@ class Bi::Archive
   end
 
   #
-  def _set_index(index)
-    @index = index.to_h{|i| [i.first, Entry.new(*i)] }
+  def _set_raw_index(raw_index)
+    @error = nil
+    tmp = nil
+    begin
+      tmp = JSON::load raw_index
+    rescue => e
+      @error = "#{e}"
+    end
+    if @error
+      @index = nil
+    else
+      @index = tmp.to_h{|i| [i.first, Entry.new(*i)] }
+    end
   end
 
   #

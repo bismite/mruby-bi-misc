@@ -4,6 +4,7 @@
 #include <mruby/variable.h>
 #include <mruby/string.h>
 #include <mruby/hash.h>
+#include <mruby/presym.h>
 
 #include <bi/texture.h>
 #include <bi/bi_sdl.h>
@@ -72,11 +73,11 @@ static void read_from_rwops(mrb_state *mrb, mrb_value self, SDL_RWops *io)
   uint32_t header,index_size;
   mrb_bi_archive_struct *a = DATA_PTR(self);
   a->file_size = SDL_RWsize(io);
-
   // header
   SDL_RWread(io,&header,4,1);
-  if(header!=1) {
-    mrb_raise(mrb, E_RUNTIME_ERROR, "archive load failed : header invalid.");
+  if(header!=2) {
+    mrb_iv_set(mrb, self, MRB_SYM(error), mrb_str_new_lit(mrb, "archive load failed : header invalid.") );
+    return;
   }
   // index length
   SDL_RWread(io,&index_size,4,1);
@@ -84,13 +85,13 @@ static void read_from_rwops(mrb_state *mrb, mrb_value self, SDL_RWops *io)
   // index
   char* buf = malloc(index_size);
   if(SDL_RWread(io,buf,index_size,1)!=1) {
-    mrb_raise(mrb, E_RUNTIME_ERROR, "archive load failed: index can not read.");
+    mrb_iv_set(mrb, self, MRB_SYM(error), mrb_str_new_lit(mrb, "archive load failed: index can not read.") );
+    free(buf);
+    return;
   }
   decrypt64(buf,index_size,a->secret);
   mrb_value index_str = mrb_str_new_static(mrb,buf,index_size);
-  mrb_value json_mod = mrb_obj_value( mrb_module_get(mrb,"JSON") );
-  mrb_value index_obj = mrb_funcall(mrb,json_mod,"load",1,index_str);
-  mrb_funcall(mrb,self,"_set_index",1,index_obj);
+  mrb_funcall(mrb,self,"_set_raw_index",1,index_str);
   free(buf);
 }
 
