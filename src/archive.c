@@ -128,7 +128,7 @@ static void onload(unsigned int handle, void* _context, void* data, unsigned int
   mrb_value argv[1] = { self };
   if( mrb_symbol_p(callback) ){
     mrb_funcall_argv(mrb,self,mrb_symbol(callback),1,argv);
-  }else if( mrb_type(callback) == MRB_TT_PROC ) {
+  }else if( mrb_proc_p(callback) ) {
     mrb_yield_argv(mrb,callback,1,argv);
   }
 
