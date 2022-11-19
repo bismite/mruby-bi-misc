@@ -11,6 +11,8 @@
 - coinflip()
 
 # Changelog
+## 2.0.1 - 2022/11/19
+- Archive: fix file read
 ## 2.0.0 - 2022/11/14
 - archive ver3
 - Archive sets error attribute when failed parse index

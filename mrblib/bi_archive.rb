@@ -65,7 +65,7 @@ class Bi::Archive
     if e
       self._read e.start,e.size
     elsif File.file?(name)
-      File.open(name).read
+      File.open(name,"rb"){|f| f.read }
     end
   end
 
@@ -86,7 +86,7 @@ class Bi::Archive
     if @index.include? name
       Bi::Music.new self.read(name)
     elsif File.file?(name)
-      Bi::Music.new File.open(name).read()
+      Bi::Music.new( File.open(name,"rb"){|f| f.read } )
     end
   end
 
@@ -95,7 +95,7 @@ class Bi::Archive
     if @index.include? name
       Bi::Sound.new self.read(name)
     elsif File.file?(name)
-      Bi::Sound.new File.open(name).read
+      Bi::Sound.new( File.open(name,"rb"){|f| f.read } )
     end
   end
 
