@@ -11,6 +11,10 @@
 - coinflip()
 
 # Changelog
+## 2.1.0 - 2023/03/08
+- src/geometry.c : replaced mrb_to_flo with mrb_float.
+- mrblib/bi_archive.rb : use File.file? and return self in load function.
+- src/bi_misc.c : add save_screenshot().
 ## 2.0.1 - 2022/11/19
 - Archive: fix file read
 ## 2.0.0 - 2022/11/14
