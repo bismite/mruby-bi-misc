@@ -27,11 +27,11 @@ class Bi::Archive
     if emscripten?
       self._download callback
     else
-      _open if File.exists?(self.path)
+      _open if File.file?(self.path)
       @available = true
       callback.call(self) if callback
     end
-    return nil
+    self
   end
 
   def available?
