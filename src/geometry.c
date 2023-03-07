@@ -4,7 +4,7 @@
 #include <mruby/numeric.h>
 #include <stdbool.h>
 
-#define f(a,x) mrb_to_flo(mrb,RARRAY_PTR(a)[x])
+#define f(a,x) mrb_float(RARRAY_PTR(a)[x])
 
 //
 // inner methods
