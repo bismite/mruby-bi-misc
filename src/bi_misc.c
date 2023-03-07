@@ -1,8 +1,10 @@
+#include <stdlib.h>
 #include <mruby.h>
 #include <mruby/array.h>
 #include <mruby/value.h>
 #include <mruby/string.h>
-#include <stdlib.h>
+#include <bi/bi_sdl.h>
+#include <bi/bi_gl.h>
 
 //
 extern void mrb_mruby_bi_archive_gem_init(mrb_state* mrb);
@@ -205,6 +207,28 @@ static mrb_value mrb_sort_ab_sort_ab(mrb_state *mrb, mrb_value ary)
   return result;
 }
 
+// Screenshot
+static mrb_value save_screenshot(mrb_state* mrb, mrb_value self)
+{
+  const char* filename;
+  mrb_int w,h;
+  mrb_get_args(mrb, "zii", &filename, &w, &h );
+  uint8_t* tmp = malloc(4*w*h);
+  glBindFramebuffer(GL_FRAMEBUFFER,0);
+  glReadPixels(0,0,w,h,GL_RGBA,GL_UNSIGNED_BYTE,tmp);
+  uint8_t* pixels = malloc(4*w*h);
+  const int pitch = 4*w;
+  for(int i=1;i<=h;i++) {
+    memcpy( &(pixels[(h-i)*pitch]), &(tmp[(i-1)*pitch]), pitch );
+  }
+  free(tmp);
+  SDL_Surface* s = SDL_CreateRGBSurfaceWithFormatFrom(pixels,w,h,32,pitch,SDL_PIXELFORMAT_RGBA32);
+  IMG_SavePNG(s,filename);
+  SDL_FreeSurface(s);
+  free(pixels);
+  return self;
+}
+
 //
 // ---- mruby gem ----
 //
@@ -220,6 +244,8 @@ void mrb_mruby_bi_misc_gem_init(mrb_state *mrb)
 
   mrb_define_const(mrb, mrb->kernel_module, "MRB_FIXNUM_MIN", mrb_fixnum_value(MRB_FIXNUM_MIN));
   mrb_define_const(mrb, mrb->kernel_module, "MRB_FIXNUM_MAX", mrb_fixnum_value(MRB_FIXNUM_MAX));
+
+  mrb_define_class_method(mrb, bi, "save_screenshot", save_screenshot, MRB_ARGS_REQ(3)); // filename,w,h
 
   //
   mrb_mruby_bi_archive_gem_init(mrb);
