@@ -4,8 +4,6 @@
 #include <mruby/numeric.h>
 #include <stdbool.h>
 
-#define f(a,x) mrb_float(RARRAY_PTR(a)[x])
-
 //
 // inner methods
 //
@@ -116,9 +114,8 @@ static mrb_value mrb_bi_line_nearest_intersection(mrb_state *mrb, mrb_value self
   mrb_float sx,sy, dx,dy;
   mrb_value subjects;
   bool new_intersection, nearest_available;
-  mrb_float px,py;
+  mrb_float x1, y1, x2, y2;
   mrb_get_args(mrb, "ffffA", &sx, &sy, &dx, &dy, &subjects );
-
   len = RARRAY_LEN(subjects);
   nearest_available = false;
   for (i = 0; i < len; i++) {
@@ -126,21 +123,22 @@ static mrb_value mrb_bi_line_nearest_intersection(mrb_state *mrb, mrb_value self
     v = RARRAY_PTR(subjects)[i];
     switch (RARRAY_LEN(v)) {
     case 2:
-      px = f(v,0);
-      py = f(v,1);
-      new_intersection = _on(sx,sy,dx,dy, px, py );
+      x1 = mrb_as_float(mrb,RARRAY_PTR(v)[0]);
+      y1 = mrb_as_float(mrb,RARRAY_PTR(v)[1]);
+      new_intersection = _on( sx,sy,dx,dy, x1,y1 );
       if(new_intersection){
-        ix = px;
-        iy = py;
+        ix = x1;
+        iy = y1;
       }
       break;
     case 4:
-      new_intersection = _intersection(sx,sy,dx,dy,
-                                       f(v,0), f(v,1), f(v,2), f(v,3),
-                                       &ix, &iy );
+      x1 = mrb_as_float(mrb,RARRAY_PTR(v)[0]);
+      y1 = mrb_as_float(mrb,RARRAY_PTR(v)[1]);
+      x2 = mrb_as_float(mrb,RARRAY_PTR(v)[2]);
+      y2 = mrb_as_float(mrb,RARRAY_PTR(v)[3]);
+      new_intersection = _intersection( sx,sy,dx,dy, x1,y1,x2,y2, &ix,&iy );
       break;
     }
-
     if(new_intersection){
       if(nearest_available) {
         if( _compare_length(sx,sy,nearest_x,nearest_y,sx,sy,ix,iy) > 0 ) {
@@ -154,7 +152,6 @@ static mrb_value mrb_bi_line_nearest_intersection(mrb_state *mrb, mrb_value self
       }
     }
   }
-
   if(nearest_available){
     mrb_value result[2];
     result[0] = mrb_float_value(mrb, nearest_x);

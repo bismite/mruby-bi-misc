@@ -11,6 +11,8 @@
 - coinflip()
 
 # Changelog
+## 2.1.1 - 2023/03/19
+- src/geometry.c : fix by mrb_as_float.
 ## 2.1.0 - 2023/03/08
 - src/geometry.c : replaced mrb_to_flo with mrb_float.
 - mrblib/bi_archive.rb : use File.file? and return self in load function.
@@ -39,6 +41,6 @@
 
 # License
 
-Copyright 2021-2022 kbys <work4kbys@gmail.com>
+Copyright 2021-2023 kbys <work4kbys@gmail.com>
 
 Apache License Version 2.0
