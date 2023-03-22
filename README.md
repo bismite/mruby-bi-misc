@@ -11,6 +11,8 @@
 - coinflip()
 
 # Changelog
+## 3.0.0 - 2023/03/23
+- license changed : MIT License
 ## 2.1.1 - 2023/03/19
 - src/geometry.c : fix by mrb_as_float.
 ## 2.1.0 - 2023/03/08
@@ -40,7 +42,6 @@
 - implements crc32() internally.
 
 # License
-
 Copyright 2021-2023 kbys <work4kbys@gmail.com>
 
-Apache License Version 2.0
+MIT License
