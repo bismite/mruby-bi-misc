@@ -1,7 +1,6 @@
 # mruby-bi-misc
 
 - Bi::Archive
-- Bi::Sound
 - Bi::Line and Bi::Rectangle
 - Bi::crc32() and Bi::crc64()
 - CellularAutomaton
@@ -11,6 +10,8 @@
 - coinflip()
 
 # Changelog
+## 4.0.0 - 2023/04/06
+- remove Sound module
 ## 3.0.0 - 2023/03/23
 - license changed : MIT License
 ## 2.1.1 - 2023/03/19
