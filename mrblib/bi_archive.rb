@@ -81,22 +81,4 @@ class Bi::Archive
     end
   end
 
-  # load music
-  def music(name)
-    if @index.include? name
-      Bi::Music.new self.read(name)
-    elsif File.file?(name)
-      Bi::Music.new( File.open(name,"rb"){|f| f.read } )
-    end
-  end
-
-  # load sound
-  def sound(name)
-    if @index.include? name
-      Bi::Sound.new self.read(name)
-    elsif File.file?(name)
-      Bi::Sound.new( File.open(name,"rb"){|f| f.read } )
-    end
-  end
-
 end

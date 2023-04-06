@@ -10,6 +10,8 @@
 - coinflip()
 
 # Changelog
+## 4.0.1 - 2023/04/07
+- remove Sound module (fix)
 ## 4.0.0 - 2023/04/06
 - remove Sound module
 ## 3.0.0 - 2023/03/23
