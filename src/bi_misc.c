@@ -206,6 +206,22 @@ static mrb_value mrb_sort_ab_sort_ab(mrb_state *mrb, mrb_value ary)
   return result;
 }
 
+static mrb_value mrb_bi_get_platform(mrb_state* mrb, mrb_value self)
+{
+  return mrb_str_new_cstr(mrb, SDL_GetPlatform());
+}
+
+static mrb_value mrb_bi_get_pointer_size(mrb_state* mrb, mrb_value self)
+{
+  return mrb_fixnum_value( sizeof(void*)*8 );
+}
+
+static mrb_value mrb_bi_is_little_endian(mrb_state* mrb, mrb_value self)
+{
+  return mrb_bool_value( SDL_BYTEORDER == SDL_LIL_ENDIAN );
+}
+
+
 // Screenshot
 static mrb_value save_screenshot(mrb_state* mrb, mrb_value self)
 {
@@ -240,6 +256,9 @@ void mrb_mruby_bi_misc_gem_init(mrb_state *mrb)
   struct RClass *bi = mrb_class_get(mrb, "Bi");
   mrb_define_class_method(mrb, bi, "crc32", mrb_bi_crc32, MRB_ARGS_REQ(2)); // crc,str
   mrb_define_class_method(mrb, bi, "crc64", mrb_bi_crc64, MRB_ARGS_REQ(2)); // crc,str
+  mrb_define_class_method(mrb, bi, "get_platform", mrb_bi_get_platform, MRB_ARGS_NONE());
+  mrb_define_class_method(mrb, bi, "get_pointer_size", mrb_bi_get_pointer_size, MRB_ARGS_NONE());
+  mrb_define_class_method(mrb, bi, "little_endian?", mrb_bi_is_little_endian, MRB_ARGS_NONE());
 
   mrb_define_const(mrb, mrb->kernel_module, "MRB_FIXNUM_MIN", mrb_fixnum_value(MRB_FIXNUM_MIN));
   mrb_define_const(mrb, mrb->kernel_module, "MRB_FIXNUM_MAX", mrb_fixnum_value(MRB_FIXNUM_MAX));

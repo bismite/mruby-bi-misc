@@ -10,6 +10,8 @@
 - coinflip()
 
 # Changelog
+## 4.1.0 - 2023/04/07
+- add `Bi::get_platform` `Bi::get_pointer_size` `Bi::little_endian?`
 ## 4.0.1 - 2023/04/07
 - remove Sound module (fix)
 ## 4.0.0 - 2023/04/06
