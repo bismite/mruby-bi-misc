@@ -10,6 +10,8 @@
 - coinflip()
 
 # Changelog
+## 4.2.0 - 2024/10/10
+- add `Kernel#execvp`
 ## 4.1.0 - 2023/04/09
 - add `Bi::get_platform` `Bi::get_pointer_size` `Bi::little_endian?`
 ## 4.0.1 - 2023/04/07

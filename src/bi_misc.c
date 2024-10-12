@@ -1,8 +1,10 @@
 #include <stdlib.h>
+#include <unistd.h>
 #include <mruby.h>
 #include <mruby/array.h>
 #include <mruby/value.h>
 #include <mruby/string.h>
+#include <mruby/presym.h>
 #include <bi/bi_sdl.h>
 #include <bi/bi_gl.h>
 
@@ -244,6 +246,23 @@ static mrb_value save_screenshot(mrb_state* mrb, mrb_value self)
   return self;
 }
 
+// Kernel
+static mrb_value mrb_execvp(mrb_state* mrb, mrb_value self)
+{
+  const char* cmd;
+  mrb_int cmd_len;
+  mrb_value *mrb_argv;
+  mrb_int argc;
+  char** argv;
+  mrb_get_args(mrb, "sa", &cmd,&cmd_len, &mrb_argv,&argc );
+  argv = mrb_malloc(mrb, sizeof(char *) * (argc + 1));
+  for(int i=0;i<argc;i++){
+    argv[i] = RSTRING_CSTR(mrb,mrb_argv[i]);
+  }
+  argv[argc] = NULL;
+  execvp(cmd,argv);
+}
+
 //
 // ---- mruby gem ----
 //
@@ -260,6 +279,8 @@ void mrb_mruby_bi_misc_gem_init(mrb_state *mrb)
   mrb_define_class_method(mrb, bi, "get_pointer_size", mrb_bi_get_pointer_size, MRB_ARGS_NONE());
   mrb_define_class_method(mrb, bi, "little_endian?", mrb_bi_is_little_endian, MRB_ARGS_NONE());
 
+  // Kernel
+  mrb_define_method_id(mrb, mrb->kernel_module, MRB_SYM(execvp), mrb_execvp, MRB_ARGS_REQ(2)); // cmd,args
   mrb_define_const(mrb, mrb->kernel_module, "MRB_FIXNUM_MIN", mrb_fixnum_value(MRB_FIXNUM_MIN));
   mrb_define_const(mrb, mrb->kernel_module, "MRB_FIXNUM_MAX", mrb_fixnum_value(MRB_FIXNUM_MAX));
 
