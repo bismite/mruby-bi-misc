@@ -3,4 +3,5 @@ MRuby::Gem::Specification.new('mruby-bi-misc') do |spec|
   spec.author = 'kbys <work4kbys@gmail.com>'
   spec.version = '4.2.0'
   spec.add_dependency('mruby-libbismite')
+  spec.add_dependency('mruby-bi-crc')
 end

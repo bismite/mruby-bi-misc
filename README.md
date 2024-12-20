@@ -2,7 +2,6 @@
 
 - Bi::Archive
 - Bi::Line and Bi::Rectangle
-- Bi::crc32() and Bi::crc64()
 - CellularAutomaton
 - dlopen
 - stable_sort
@@ -10,6 +9,8 @@
 - coinflip()
 
 # Changelog
+## 5.0.0 - 2024/12/21
+- Remove code that process crc. (Use mruby-bi-crc)
 ## 4.2.0 - 2024/10/10
 - add `Kernel#execvp`
 ## 4.1.0 - 2023/04/09

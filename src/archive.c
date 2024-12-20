@@ -9,7 +9,7 @@
 #include <bi/texture.h>
 #include <bi/bi_sdl.h>
 #include <bi_core.h>
-#include <bi_misc.h>
+#include <bi_crc.h>
 
 #include <string.h>
 #include <stdlib.h>
@@ -62,7 +62,7 @@ static mrb_value mrb_archive_initialize(mrb_state *mrb, mrb_value self)
   a->file_size = 0;
   a->index_size = 0;
   a->data = NULL;
-  a->secret = bi_crc64(0,(uint8_t*)RSTRING_PTR(secret),RSTRING_LEN(secret));
+  a->secret = bi_crc64xz(0,(uint8_t*)RSTRING_PTR(secret),RSTRING_LEN(secret));
   mrb_data_init(self, a, &mrb_archive_data_type);
 
   return self;
