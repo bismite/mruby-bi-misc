@@ -50,6 +50,6 @@
 - implements crc32() internally.
 
 # License
-Copyright 2021-2023 kbys <work4kbys@gmail.com>
+Copyright 2021-2024 kbys <work4kbys@gmail.com>
 
 MIT License
